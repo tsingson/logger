@@ -1,35 +1,33 @@
-# **DO NOT use this in your business project**
-# a thin wraper of [uber-go/zap](https://github.com/uber-go/zap) logger for personal project 
-
-[![GoDoc](https://godoc.org/github.com/tsingson/logger?status.svg)](https://godoc.org/github.com/tsingson/logger)[![Go Report Card](https://goreportcard.com/badge/github.com/tsingson/logger)](https://goreportcard.com/report/github.com/tsingson/logger)
+#   [uber-go/zap](go.uber.org/zap) 的一个简单封装, 用于个人项目 
 
 
-## 0. thanks [uber-go/zap](https://github.com/uber-go/zap)
+
+## 0. 感谢 [uber-go/zap](https://github.com/uber-go/zap)
+
 > Blazing fast, structured, leveled logging in Go.
 >
 > ---- [uber-go/zap](https://github.com/uber-go/zap)
 
-this thin wrapper of [uber-go/zap](https://github.com/uber-go/zap)
+这是 [uber-go/zap](https://github.com/uber-go/zap) 的一个简单封装, 用于个人项目
 
-[chinese readme here 中文说明](./README_cn.md)
+[english readme here](./README.md)
 
+### 0.1 特色
 
-## 1. feature
+* 导入   [github.com/rs/zerolog/diode](github.com/rs/zerolog/diode) 支持 many-to-one 缓存, 加强日志文件写入性能
+* 支持  [gopkg.in/natefinch/lumberjack.v2](gopkg.in/natefinch/lumberjack.v2)  按日志文件大小进行存储拆分
+* 支持 [github.com/lestrrat-go/file-rotatelogs](github.com/lestrrat-go/file-rotatelogs 按每一天进行存储拆分
+* 支持 [github.com/jackc/pgx](github.com/jackc/pgx) 日志接口( interface )
+* 支持 fasthttp 日志接口 ( interface )
+* 添加默认的日志存储路径, 日志文件名, 简化配置
+* 添加 debug 选项, 方便在开发时输出日志到 STDOUT
+* 添加全局日志级别设置
 
-* Import from github.com/rs/zerolog/diode Support many-to-one caching to enhance log file write performance
-* Add gopkg.in/natefinch/lumberjack.v2 for split log file by file size
-* Add github.com/lestrrat-go/file-rotatelogs for split log file  every day
-* Support github.com/jackc/pgx/v4 log 
-* Support fasthttp log 
-* setup default log storage path, log file name....
-* debug option that logs to STDOUT 
-* add global log level setting
+## 1. 示例
 
+以下示例在 macOS 上进行示范
 
-## 2.  example
- in linux os macOS
-
- go source code in ./example-test/main.go
+ 示例代码在 ./example-test/main.go
 
 ```
 package main
@@ -72,7 +70,7 @@ func main() {
 
 ```
 
-build and runing 
+编译与运行
 
 ```
  /home/go/bin   ./example-test                      
@@ -99,66 +97,62 @@ build and runing
 ```
 
 
-## 3. how to use it
+## 2. 如何使用
 
- ### 3.1 go get and  import it
+ ### 2.1  go 导入
 
- this repo use go module
+ 使用 go module 
 
  get it
- 
-```
+ ```
  go get github.com/tsingson/logger
-```
+ ```
 
 
- import in go code
+在代码中声明导入
 
-```
+ ```
  import "github.com/tsingson/logger"
-```
+ ```
 
 logger struct  in ./zaplogger.go
 ```
 // 
 // ZapLogger a wrap of uber-go/zap
 type ZapLogger struct {
-	debug      bool    // debut is true, send log to  STDOUT
-	storeInDay bool    // storeInDay is true,  save log file day by day 
-	addCaller  bool    // 
-	days     int64     // max storage days
-	path       string   // the path to save log file
-	prefix     string   // the prefix of log file name
+	debug      bool // 输出日志到 STDOUT
+	storeInDay bool // 是否将日志按天存储的标志位, 为 true 时按天拆分日志
+	addCaller  bool //
+	days     int64  // 日志文件保存天数
+	path       string // 日志存储路径
+	prefix     string // 日志文件名前缀
 	Log        *zap.Logger
-	logLevel zapcore.LevelEnabler  // global log level setting, default is info level
+	logLevel zapcore.LevelEnabler // 全局日志级别设置项
 }
 
-// Logger  nick name
+// Logger  别名
 type Logger = ZapLogger
 
 ```
 
 initial the logger 
 
-simple :
+简单引用 :
+```
+    log := logger.New() // 定义日志
+    defer log.Sync()   // 同步日志到文件
+```
 
+设置一些配置项 
 ```
-    log := logger.New()
-    defer log.Sync()
-```
-
-add options 
-```
-    log := logger.New(logger.WithDebug(true ), logger.WithAddCaller())
-    defer log.Sync()
-    
-    logger.SetLevel(zap.DebugLevel) // change log level in runtime
+ 	log := logger.New(logger.WithDebug(), logger.WithAddCaller(), logger.WithStoreInDay()) // 定义
+	defer log.Sync() // 同步日志到文件
+	logger.SetLevel(zap.DebugLevel) // 运行时设置全局日志输出级别
 ```
 
 
 
-## 4. change log
+## 3. 变更记录
 
-1.  2019/10/28 move code from project as single repo
-2.  2019/12/24 add log storage in every day and splite error log 
-3.  2020/02/08 clean up for golangci-lint
+1.  2019/10/28 从商用项目中拆分出基于 zap 的日志封装
+2.  2019/12/24 增加每一天存储一个日志文件, 增加单独的错误日志文件
