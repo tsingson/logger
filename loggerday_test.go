@@ -26,7 +26,7 @@ func BenchmarkBufferedWriteSyncer(b *testing.B) {
 		b.ResetTimer()
 		b.RunParallel(func(pb *testing.PB) {
 			for pb.Next() {
-				w.Write([]byte("foobarbazbabble"))
+				_, _ = w.Write([]byte("foobarbazbabble"))
 			}
 		})
 	})
