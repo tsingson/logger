@@ -13,14 +13,14 @@ func main() {
 
 	log.Info("test", zap.String("name", "tsingson"))
 
-	//zapLogger := log.Named("slog")
-	//sl := slog.New(slogzap.Option{Level: slog.LevelDebug, Logger: zapLogger}.NewZapHandler())
-	//sl = sl.
+	// zapLogger := log.Named("slog")
+	// sl := slog.New(slogzap.Option{Level: slog.LevelDebug, Logger: zapLogger}.NewZapHandler())
+	// sl = sl.
 	//	With("environment", "dev").
 	//	With("release", "v1.0.0")
 
 	// log error
-	//sl.
+	// sl.
 	//	With("category", "sql").
 	//	With("query.statement", "SELECT COUNT(*) FROM users;").
 	//	With("query.duration", 1*time.Second).
