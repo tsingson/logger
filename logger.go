@@ -11,6 +11,7 @@ import (
 
 // Logger zap adapter log
 type Logger struct {
+	core         zapcore.Core
 	path         string
 	prefix       string
 	Log          *zap.Logger
@@ -143,6 +144,7 @@ func New(opts ...ZapLoggerOption) *ZapLogger {
 	} else {
 		core = sizeLogger(s.path, s.prefix, s.debug)
 	}
+	s.core = core
 
 	if s.addCaller {
 		s.Log = zap.New(core, zap.AddCaller(), zap.AddStacktrace(zap.WarnLevel))
@@ -154,14 +156,20 @@ func New(opts ...ZapLoggerOption) *ZapLogger {
 				3,           // log first 3 entries
 				0,           // thereafter log zero entires within the interval
 			)
+			s.core = samplingCore
 			s.Log = zap.New(samplingCore)
 			return s
 		} else {
+			s.core = core
 			s.Log = zap.New(core)
 		}
 	}
 
 	return s
+}
+
+func (s *Logger) Core() zapcore.Core {
+	return s.core
 }
 
 // Sync wrap sync
