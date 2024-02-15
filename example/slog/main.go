@@ -1,10 +1,11 @@
 package main
 
 import (
+	"log/slog"
+
 	"github.com/tsingson/logger"
 	"go.uber.org/zap/exp/zapslog"
 	"go.uber.org/zap/zapcore"
-	"golang.org/x/exp/slog"
 )
 
 func main() {
@@ -20,7 +21,7 @@ func main() {
 	//
 	//defer logger.Sync()
 
-	sl := slog.New(zapslog.NewHandler(myLog.Log.Core()))
+	sl := slog.New(zapslog.NewHandler(myLog.Core(), nil))
 
 	sl.Info(
 		"incoming request",
