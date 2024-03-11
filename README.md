@@ -1,4 +1,4 @@
-# **DO NOT use this in your business project**
+# **DO NOT USE THIS IN  YOUR BUSINESS PROJECT**
 # a thin wraper of [uber-go/zap](https://github.com/uber-go/zap) logger for personal project 
 
 [![GoDoc](https://godoc.org/github.com/tsingson/logger?status.svg)](https://godoc.org/github.com/tsingson/logger)[![Go Report Card](https://goreportcard.com/badge/github.com/tsingson/logger)](https://goreportcard.com/report/github.com/tsingson/logger)
@@ -156,9 +156,13 @@ add options
 ```
 
 
+## 4. limit
+hard code for 3G mem for log writer, so , **DO NO USE IN YOUR BUSINESS PROJECT**
 
-## 4. change log
+
+## 5. change log
 
 1.  2019/10/28 move code from project as single repo
 2.  2019/12/24 add log storage in every day and splite error log 
 3.  2020/02/08 clean up for golangci-lint
+4.  2024/03/09 adapter to log/slog
